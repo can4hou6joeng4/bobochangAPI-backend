@@ -76,6 +76,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             user.setUserPassword(encryptPassword);
             user.setAccessKey(key.getAccessKey());
             user.setSecretKey(key.getSecretKey());
+            // 默认昵称
+            user.setUserName(UserConstant.DEFAULT_NICKNAME);
+            user.setUserAvatar(UserConstant.DEFAULT_AVATAR_URL);
+            // 默认头像
             boolean saveResult = this.save(user);
             if (!saveResult) {
                 throw new BusinessException(ErrorCode.SYSTEM_ERROR, "注册失败，数据库错误");
