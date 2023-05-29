@@ -9,14 +9,18 @@ import com.bobochang.apiplatform.common.ErrorCode;
 import com.bobochang.apiplatform.common.ResultUtils;
 import com.bobochang.apiplatform.constant.CommonConstant;
 import com.bobochang.apiplatform.exception.BusinessException;
+import com.bobochang.apiplatform.exception.ThrowUtils;
 import com.bobochang.apiplatform.model.dto.userInterfaceInfo.UserInterfaceInfoAddRequest;
+import com.bobochang.apiplatform.model.dto.userInterfaceInfo.UserInterfaceInfoQueryForOneRequest;
 import com.bobochang.apiplatform.model.dto.userInterfaceInfo.UserInterfaceInfoQueryRequest;
 import com.bobochang.apiplatform.model.dto.userInterfaceInfo.UserInterfaceInfoUpdateRequest;
 import com.bobochang.apiplatform.model.entity.User;
 import com.bobochang.apiplatform.model.entity.UserInterfaceInfo;
+import com.bobochang.apiplatform.model.vo.UserInterfaceInfoVO;
 import com.bobochang.apiplatform.service.UserInterfaceInfoService;
 import com.bobochang.apiplatform.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
@@ -196,6 +200,24 @@ public class UserInterfaceInfoController {
         return ResultUtils.success(userInterfaceInfoPage);
     }
 
+    /**
+     * 根据 userId 和 InterfaceInfoId 查询调用次数信息
+     *
+     * @param userInterfaceInfoQueryForOneRequest
+     * @param request
+     * @return
+     */
+    @GetMapping("/get/one")
+    public BaseResponse<UserInterfaceInfoVO> getUserInterfaceInfoByUserIdAndInterfaceInfoId(UserInterfaceInfoQueryForOneRequest userInterfaceInfoQueryForOneRequest, HttpServletRequest request) {
+        UserInterfaceInfoVO userInterfaceInfoVO = new UserInterfaceInfoVO();
+        ThrowUtils.throwIf(ObjectUtils.isEmpty(userInterfaceInfoQueryForOneRequest), ErrorCode.PARAMS_ERROR);
+        QueryWrapper<UserInterfaceInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("userId", userInterfaceInfoQueryForOneRequest.getUserId());
+        queryWrapper.eq("interfaceInfoId", userInterfaceInfoQueryForOneRequest.getInterfaceInfoId());
+        UserInterfaceInfo userInterfaceInfo = userInterfaceInfoService.getOne(queryWrapper);
+        BeanUtils.copyProperties(userInterfaceInfo, userInterfaceInfoVO);
+        return ResultUtils.success(userInterfaceInfoVO);
+    }
     // endregion
 
 }
