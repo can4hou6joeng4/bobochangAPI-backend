@@ -30,5 +30,15 @@ public interface UserConstant {
      */
     String BAN_ROLE = "ban";
 
+    /**
+     * 默认昵称
+     */
+    String DEFAULT_NICKNAME = "点击这里设置昵称";
+
+    /**
+     * 默认头像
+     */
+    String DEFAULT_AVATAR_URL = "https://img.qimuu.icu/typory/teamImg1.jpg";
+
     // endregion
 }
