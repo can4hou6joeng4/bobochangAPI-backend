@@ -2,10 +2,7 @@ package com.bobochang.apiplatform.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bobochang.apiplatform.annotation.AuthCheck;
-import com.bobochang.apiplatform.common.BaseResponse;
-import com.bobochang.apiplatform.common.DeleteRequest;
-import com.bobochang.apiplatform.common.ErrorCode;
-import com.bobochang.apiplatform.common.ResultUtils;
+import com.bobochang.apiplatform.common.*;
 import com.bobochang.apiplatform.constant.UserConstant;
 import com.bobochang.apiplatform.exception.BusinessException;
 import com.bobochang.apiplatform.exception.ThrowUtils;
@@ -268,5 +265,16 @@ public class UserController {
         boolean result = userService.updateById(user);
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
         return ResultUtils.success(true);
+    }
+
+    /**
+     * 重新生成ak、sk
+     * @param request
+     * @return
+     */
+    @GetMapping("/reload")
+    public BaseResponse<Boolean> reloadKey(HttpServletRequest request) {
+        User loginUser = userService.getLoginUser(request);
+        return ResultUtils.success(userService.reloadKey(loginUser));
     }
 }

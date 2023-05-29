@@ -246,4 +246,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 sortField);
         return queryWrapper;
     }
+
+    @Override
+    public boolean reloadKey(User user) {
+        KeyUtils.Key key = KeyUtils.genKey(user.getUserAccount());
+        User oldUser = getById(user.getId());
+        oldUser.setAccessKey(key.getAccessKey());
+        oldUser.setSecretKey(key.getSecretKey());
+        return updateById(oldUser);
+    }
 }

@@ -110,4 +110,10 @@ public interface UserService extends IService<User> {
      */
     QueryWrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest);
 
+    /**
+     * 更新ak、sk
+     * @param user
+     * @return
+     */
+    boolean reloadKey(User user);
 }
