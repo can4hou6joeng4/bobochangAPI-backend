@@ -30,14 +30,14 @@ public class LoginUserVO implements Serializable {
     private String userAvatar;
 
     /**
-     * 用户简介
+     * accessKey
      */
-    private String userProfile;
+    private String accessKey;
 
     /**
-     * 用户角色：user/admin/ban
+     * secretKey
      */
-    private String userRole;
+    private String secretKey;
 
     /**
      * 创建时间
