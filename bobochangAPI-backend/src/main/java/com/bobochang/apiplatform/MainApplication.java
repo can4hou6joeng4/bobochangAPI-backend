@@ -1,5 +1,6 @@
 package com.bobochang.apiplatform;
 
+import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,6 +16,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 // 如需开启 Redis，须移除 exclude 中的内容
 @SpringBootApplication()
 @MapperScan("com.bobochang.apiplatform.mapper")
+@EnableDubbo
 @EnableScheduling
 @EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)
 public class MainApplication {

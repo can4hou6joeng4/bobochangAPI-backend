@@ -1,8 +1,8 @@
 package com.bobochang.apiplatform.exception;
 
-import com.bobochang.apiplatform.common.BaseResponse;
-import com.bobochang.apiplatform.common.ErrorCode;
-import com.bobochang.apiplatform.common.ResultUtils;
+import com.bobochang.apicommon.common.BaseResponse;
+import com.bobochang.apicommon.common.ErrorCode;
+import com.bobochang.apicommon.common.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

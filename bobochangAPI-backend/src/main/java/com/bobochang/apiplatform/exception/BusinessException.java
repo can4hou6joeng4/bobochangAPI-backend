@@ -1,6 +1,7 @@
 package com.bobochang.apiplatform.exception;
 
-import com.bobochang.apiplatform.common.ErrorCode;
+
+import com.bobochang.apicommon.common.ErrorCode;
 
 /**
  * 自定义异常类

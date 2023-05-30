@@ -1,15 +1,15 @@
 package com.bobochang.apiplatform.controller;
 
 import cn.hutool.core.io.FileUtil;
-import com.bobochang.apiplatform.common.BaseResponse;
-import com.bobochang.apiplatform.common.ErrorCode;
-import com.bobochang.apiplatform.common.ResultUtils;
+import com.bobochang.apicommon.common.BaseResponse;
+import com.bobochang.apicommon.common.ErrorCode;
+import com.bobochang.apicommon.common.ResultUtils;
+import com.bobochang.apicommon.model.dto.file.UploadFileRequest;
+import com.bobochang.apicommon.model.entity.User;
+import com.bobochang.apicommon.model.enums.FileUploadBizEnum;
 import com.bobochang.apiplatform.constant.FileConstant;
 import com.bobochang.apiplatform.exception.BusinessException;
 import com.bobochang.apiplatform.manager.CosManager;
-import com.bobochang.apiplatform.model.dto.file.UploadFileRequest;
-import com.bobochang.apiplatform.model.entity.User;
-import com.bobochang.apiplatform.model.enums.FileUploadBizEnum;
 import com.bobochang.apiplatform.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;

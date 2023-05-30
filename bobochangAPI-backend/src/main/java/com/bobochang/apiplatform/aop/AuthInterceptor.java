@@ -1,10 +1,10 @@
 package com.bobochang.apiplatform.aop;
 
+import com.bobochang.apicommon.common.ErrorCode;
+import com.bobochang.apicommon.model.entity.User;
+import com.bobochang.apicommon.model.enums.UserRoleEnum;
 import com.bobochang.apiplatform.annotation.AuthCheck;
-import com.bobochang.apiplatform.common.ErrorCode;
 import com.bobochang.apiplatform.exception.BusinessException;
-import com.bobochang.apiplatform.model.entity.User;
-import com.bobochang.apiplatform.model.enums.UserRoleEnum;
 import com.bobochang.apiplatform.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;

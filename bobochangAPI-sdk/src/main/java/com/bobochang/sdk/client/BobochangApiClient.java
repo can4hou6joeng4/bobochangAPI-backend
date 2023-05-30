@@ -1,6 +1,5 @@
 package com.bobochang.sdk.client;
 
-import cn.hutool.core.util.RandomUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.json.JSONUtil;
@@ -15,6 +14,7 @@ import java.util.Map;
  */
 public class BobochangApiClient {
 
+    private final String GATEWAY_HOST = "http://localhost:9000";
     /**
      * 用户授权名
      */
@@ -41,18 +41,18 @@ public class BobochangApiClient {
         String json = JSONUtil.toJsonStr(requestParams);
 
         HttpResponse response = HttpRequest
-                .post("http://localhost:8123/api/name/json")
+                .post(GATEWAY_HOST + "/api/name/json")
                 .addHeaders(getHeaderMap(json))
                 .body(json)
                 .execute();
         return response.body();
     }
 
-    public String getUsernameByPost(User user){
+    public String getUsernameByPost(User user) {
         String json = JSONUtil.toJsonStr(user);
 
         HttpResponse response = HttpRequest
-                .post("http://localhost:8123/api/name/json")
+                .post(GATEWAY_HOST + "/api/name/json")
                 .addHeaders(getHeaderMap(json))
                 .body(json)
                 .execute();

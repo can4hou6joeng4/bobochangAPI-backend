@@ -1,8 +1,7 @@
 package com.bobochang.apiplatform.service;
 
-import com.bobochang.apiplatform.model.entity.InterfaceInfo;
-import com.bobochang.apiplatform.model.entity.UserInterfaceInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.bobochang.apicommon.model.entity.UserInterfaceInfo;
 
 /**
 * @author bobochang

@@ -1,7 +1,7 @@
 package com.bobochang.apiplatform.mapper;
 
-import com.bobochang.apiplatform.model.entity.UserInterfaceInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.bobochang.apicommon.model.entity.UserInterfaceInfo;
 
 /**
 * @author bobochang

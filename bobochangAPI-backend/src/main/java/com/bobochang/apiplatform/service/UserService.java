@@ -2,10 +2,11 @@ package com.bobochang.apiplatform.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.bobochang.apiplatform.model.dto.user.UserQueryRequest;
-import com.bobochang.apiplatform.model.entity.User;
-import com.bobochang.apiplatform.model.vo.LoginUserVO;
-import com.bobochang.apiplatform.model.vo.UserVO;
+import com.bobochang.apicommon.model.dto.user.UserQueryRequest;
+import com.bobochang.apicommon.model.entity.User;
+import com.bobochang.apicommon.model.vo.LoginUserVO;
+import com.bobochang.apicommon.model.vo.UserVO;
+
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

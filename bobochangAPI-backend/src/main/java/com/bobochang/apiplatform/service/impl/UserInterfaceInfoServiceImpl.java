@@ -1,15 +1,13 @@
 package com.bobochang.apiplatform.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.bobochang.apiplatform.common.ErrorCode;
+import com.bobochang.apicommon.common.ErrorCode;
+import com.bobochang.apicommon.model.entity.UserInterfaceInfo;
 import com.bobochang.apiplatform.exception.BusinessException;
 import com.bobochang.apiplatform.exception.ThrowUtils;
-import com.bobochang.apiplatform.model.entity.UserInterfaceInfo;
-import com.bobochang.apiplatform.service.UserInterfaceInfoService;
 import com.bobochang.apiplatform.mapper.UserInterfaceInfoMapper;
-import org.apache.commons.lang3.StringUtils;
+import com.bobochang.apiplatform.service.UserInterfaceInfoService;
 import org.springframework.stereotype.Service;
 
 /**
