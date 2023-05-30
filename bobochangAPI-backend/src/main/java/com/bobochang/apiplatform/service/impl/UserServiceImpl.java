@@ -7,6 +7,7 @@ import com.bobochang.apiplatform.common.ErrorCode;
 import com.bobochang.apiplatform.constant.CommonConstant;
 import com.bobochang.apiplatform.constant.UserConstant;
 import com.bobochang.apiplatform.exception.BusinessException;
+import com.bobochang.apiplatform.exception.ThrowUtils;
 import com.bobochang.apiplatform.mapper.UserMapper;
 import com.bobochang.apiplatform.model.dto.user.UserQueryRequest;
 import com.bobochang.apiplatform.model.entity.User;
@@ -250,9 +251,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public boolean reloadKey(User user) {
         KeyUtils.Key key = KeyUtils.genKey(user.getUserAccount());
-        User oldUser = getById(user.getId());
+        User oldUser = getUser(user);
         oldUser.setAccessKey(key.getAccessKey());
         oldUser.setSecretKey(key.getSecretKey());
         return updateById(oldUser);
+    }
+
+    @Override
+    public boolean updateUserInfo(User user) {
+        ThrowUtils.throwIf(user.getId() == null, ErrorCode.PARAMS_ERROR, "传入用户ID为空");
+        User currentUser = getUser(user);
+        // 判断当前用户是否传了修改昵称但没有传修改头像
+        if (StringUtils.isNotBlank(user.getUserName()) && StringUtils.isBlank(user.getUserAvatar())) {
+            user.setUserAvatar(currentUser.getUserAvatar());
+            return updateById(user);
+        }
+        // 判断当前用户是否传了修改头像但没有传修改昵称
+        if (StringUtils.isBlank(user.getUserName()) && StringUtils.isNotBlank(user.getUserAvatar())) {
+            user.setUserName(currentUser.getUserName());
+            return updateById(user);
+        }
+        return false;
+    }
+
+    private User getUser(User user) {
+        return getById(user.getId());
     }
 }

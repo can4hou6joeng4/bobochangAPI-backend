@@ -116,4 +116,11 @@ public interface UserService extends IService<User> {
      * @return
      */
     boolean reloadKey(User user);
+
+    /**
+     * 更新用户信息
+     * @param user
+     * @return
+     */
+    boolean updateUserInfo(User user);
 }
