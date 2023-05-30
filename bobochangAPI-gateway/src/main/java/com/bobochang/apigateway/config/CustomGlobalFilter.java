@@ -32,7 +32,7 @@ import java.util.List;
 @Component
 public class CustomGlobalFilter implements GlobalFilter, Ordered {
     // 自定义白名单地址
-    public static final List<String> IP_WHITE_LIST = Collections.singletonList("128.0.0.1");
+    public static final List<String> IP_WHITE_LIST = Collections.singletonList("127.0.0.1");
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
