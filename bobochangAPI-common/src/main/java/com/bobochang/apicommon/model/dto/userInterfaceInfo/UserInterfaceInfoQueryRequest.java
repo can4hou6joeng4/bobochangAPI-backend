@@ -1,6 +1,7 @@
-package com.bobochang.apiplatform.model.dto.userInterfaceInfo;
+package com.bobochang.apicommon.model.dto.userInterfaceInfo;
 
-import com.bobochang.apiplatform.common.PageRequest;
+
+import com.bobochang.apicommon.common.PageRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
