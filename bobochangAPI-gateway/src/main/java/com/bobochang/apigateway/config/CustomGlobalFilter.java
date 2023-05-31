@@ -1,6 +1,14 @@
 package com.bobochang.apigateway.config;
 
+import com.bobochang.apicommon.model.entity.InterfaceInfo;
+import com.bobochang.apicommon.model.entity.User;
+import com.bobochang.apirpc.InterfaceInfo.RPCInterfaceInfo;
+import com.bobochang.apirpc.User.RPCUser;
+import com.bobochang.apirpc.UserInterfaceInfo.RPCUserInterfaceInfo;
+import com.bobochang.sdk.uils.SignUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.reactivestreams.Publisher;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -31,14 +39,26 @@ import java.util.List;
 @Slf4j
 @Component
 public class CustomGlobalFilter implements GlobalFilter, Ordered {
+
+    @DubboReference
+    private RPCUser rpcUser;
+
+    @DubboReference
+    private RPCInterfaceInfo rpcInterfaceInfo;
+
+    @DubboReference
+    private RPCUserInterfaceInfo rpcUserInterfaceInfo;
+
     // 自定义白名单地址
     public static final List<String> IP_WHITE_LIST = Collections.singletonList("127.0.0.1");
+
+    public static final String INTERFACE_HOST = "http://localhost:8123";
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         // 1、全局请求日志
         ServerHttpRequest request = exchange.getRequest();
-        String path = request.getPath().value();// 请求路径
+        String path = INTERFACE_HOST + request.getPath().value();// 请求路径
         String method = request.getMethodValue();// 请求方法
         log.info("请求唯一标识：{}", request.getId());
         log.info("请求目标路径：{}", request.getPath().value());
@@ -48,18 +68,32 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
         log.info("custom global filter");
         // 2、访问控制，黑白名单（直接设置状态码将请求拦截掉并返回）
         ServerHttpResponse response = exchange.getResponse();
-        if (!IP_WHITE_LIST.contains(request.getLocalAddress())) {
+        /*if (!IP_WHITE_LIST.contains(request.getLocalAddress())) {
             return noAuthHandler(response);
-        }
+        }*/
         // 3、用户鉴权 从请求头中取出指定参数并与其配对校验
         HttpHeaders headers = request.getHeaders();
         String accessKey = headers.getFirst("accessKey");
         String sign = headers.getFirst("sign");
-        String body = headers.getFirst("body") == null ? headers.getFirst("body") : null;
-        // todo 从数据库中查出 ak 对应的用户并取出对应的 sk
-        // todo 4、校验请求的接口是否在数据库中存在，以及请求的方法是否匹配
+        String body = headers.getFirst("body");
+        // 从数据库中查出 ak 对应的用户并取出对应的 sk
+        User user = rpcUser.getInvokeUser(accessKey);
+        if (ObjectUtils.isEmpty(user)) {
+            return noAuthHandler(response);
+        }
+        // 根据 sk 重新加密判断与body 中传入的 sk 加密后数据是否一致
+        String serverSign = SignUtils.genSign(body, user.getSecretKey());
+        if (serverSign == null || !serverSign.equals(sign)) {
+            return noAuthHandler(response);
+        }
+        // 4、校验请求的接口是否在数据库中存在，以及请求的方法是否匹配
+        // 业务逻辑层已经进行判断
+        InterfaceInfo interfaceInfo = rpcInterfaceInfo.getInterfaceInfo(path, method);
+        // if (ObjectUtils.isEmpty(interfaceInfo)) {
+        //     return noAuthHandler(response);
+        // }
         // todo 5、请求转发 -> 响应日志
-        return responseLog(exchange, chain);
+        return responseLog(exchange, chain, user.getId(), interfaceInfo.getId());
     }
 
     /**
@@ -69,7 +103,7 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
      * @param chain
      * @return
      */
-    public Mono<Void> responseLog(ServerWebExchange exchange, GatewayFilterChain chain) {
+    public Mono<Void> responseLog(ServerWebExchange exchange, GatewayFilterChain chain, long userId, long interfaceInfoId) {
         try {
             ServerHttpResponse originalResponse = exchange.getResponse();
             DataBufferFactory bufferFactory = originalResponse.bufferFactory();
@@ -88,7 +122,11 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
                             // 往返回值中写数据
                             return super.writeWith(fluxBody.map(dataBuffer -> {
                                 // todo 7、调用成功时，可以新开一个线程发送到 MQ 中。接口调用次数 + 1
-                                // rpcUserInterfaceInfo.invokeCount(interfaceInfoId,userId);
+                                try {
+                                    rpcUserInterfaceInfo.invokeCount(interfaceInfoId, userId);
+                                } catch (Exception e) {
+                                    log.error("更改调用次数失败", e);
+                                }
 
                                 byte[] content = new byte[dataBuffer.readableByteCount()];
                                 dataBuffer.read(content);
