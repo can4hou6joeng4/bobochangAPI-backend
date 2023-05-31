@@ -19,6 +19,7 @@
         <module>bobochangAPI-interface</module>
         <module>bobochangAPI-backend</module>
         <module>bobochangAPI-gateway</module>
+        <module>bobochangAPI-rpc</module>
     </modules>
 
     <packaging>pom</packaging>

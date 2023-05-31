@@ -18,6 +18,17 @@
     <packaging>jar</packaging>
 
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.apache.dubbo/dubbo -->
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo</artifactId>
+            <version>2.7.8</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.nacos</groupId>
+            <artifactId>nacos-client</artifactId>
+            <version>2.0.3</version>
+        </dependency>
         <dependency>
             <groupId>com.bobochangAPI</groupId>
             <artifactId>bobochangAPI-sdk</artifactId>
@@ -53,26 +64,10 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>com.alibaba.nacos</groupId>
-            <artifactId>nacos-client</artifactId>
-            <version>2.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.dubbo</groupId>
-            <artifactId>dubbo-spring-boot-starter</artifactId>
-            <version>3.0.6</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.dubbo</groupId>
-            <artifactId>dubbo-registry-nacos</artifactId>
-            <version>3.0.6</version>
-        </dependency>
-        <dependency>
             <groupId>com.bobochangAPI</groupId>
             <artifactId>bobochangAPI-common</artifactId>
             <version>1.0</version>
         </dependency>
-
     </dependencies>
 
     <build>
