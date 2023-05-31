@@ -44,6 +44,11 @@
             <version>1.0</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.bobochangAPI</groupId>
+            <artifactId>bobochangAPI-rpc</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>

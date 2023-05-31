@@ -68,6 +68,11 @@
             <artifactId>bobochangAPI-common</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.bobochangAPI</groupId>
+            <artifactId>bobochangAPI-rpc</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
     <build>
