@@ -1,7 +1,10 @@
 package com.bobochang.apiplatform.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.bobochang.apicommon.model.dto.interfaceInfo.InterfaceInfoInvokeRequest;
 import com.bobochang.apicommon.model.entity.InterfaceInfo;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author bobochang
@@ -12,4 +15,5 @@ public interface InterfaceInfoService extends IService<InterfaceInfo> {
 
     void validInterfaceInfo(InterfaceInfo interfaceInfo, boolean add);
 
+    Object invokeInterfaceInfo(InterfaceInfoInvokeRequest interfaceInfoInvokeRequest, HttpServletRequest request);
 }

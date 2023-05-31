@@ -211,7 +211,7 @@ public class InterfaceInfoController {
      */
     @PostMapping("/publish")
     public BaseResponse<Boolean> publishInterfaceInfo(@RequestBody IdRequest idRequest,
-                                                     HttpServletRequest request) {
+                                                      HttpServletRequest request) {
         ThrowUtils.throwIf(ObjectUtils.isEmpty(idRequest.getId()), ErrorCode.PARAMS_ERROR);
         InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(idRequest.getId());
         ThrowUtils.throwIf(ObjectUtils.isEmpty(oldInterfaceInfo), ErrorCode.NOT_FOUND_ERROR);
@@ -224,6 +224,7 @@ public class InterfaceInfoController {
 
     /**
      * 下线接口
+     *
      * @param idRequest
      * @param request
      * @return
@@ -245,18 +246,9 @@ public class InterfaceInfoController {
     //region 测试调用
     @PostMapping("/invoke")
     public BaseResponse<Object> invokeInterface(@RequestBody InterfaceInfoInvokeRequest interfaceInfoInvokeRequest,
-                                                HttpServletRequest request){
-        ThrowUtils.throwIf(ObjectUtils.isEmpty(interfaceInfoInvokeRequest.getId()), ErrorCode.PARAMS_ERROR);
-        InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(interfaceInfoInvokeRequest.getId());
-        ThrowUtils.throwIf(ObjectUtils.isEmpty(oldInterfaceInfo), ErrorCode.NOT_FOUND_ERROR);
-        ThrowUtils.throwIf(oldInterfaceInfo.getStatus()==InterfaceInfoStatusEnum.OFFLINE.getValue(), ErrorCode.PARAMS_ERROR,"接口已关闭");
-        User loginUser = userService.getLoginUser(request);
-        String accessKey = loginUser.getAccessKey();
-        String secretKey = loginUser.getSecretKey();
-        BobochangApiClient apiClient = new BobochangApiClient(accessKey, secretKey);
-        Gson gson = new Gson();
-        com.bobochang.sdk.model.User user = gson.fromJson(interfaceInfoInvokeRequest.getRequestParams(), com.bobochang.sdk.model.User.class);
-        return ResultUtils.success(apiClient.getUsernameByPost(user));
+                                                HttpServletRequest request) {
+
+        return ResultUtils.success(interfaceInfoService.invokeInterfaceInfo(interfaceInfoInvokeRequest,request));
     }
     //endregion
 }

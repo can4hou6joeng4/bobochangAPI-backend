@@ -1,13 +1,27 @@
 package com.bobochang.apiplatform.service.impl;
 
+import com.alibaba.nacos.shaded.com.google.gson.Gson;
+import com.alibaba.nacos.shaded.com.google.gson.JsonSyntaxException;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bobochang.apicommon.common.ErrorCode;
+import com.bobochang.apicommon.model.dto.interfaceInfo.InterfaceInfoInvokeRequest;
 import com.bobochang.apicommon.model.entity.InterfaceInfo;
+import com.bobochang.apicommon.model.enums.InterfaceInfoStatusEnum;
 import com.bobochang.apiplatform.exception.BusinessException;
+import com.bobochang.apiplatform.exception.ThrowUtils;
 import com.bobochang.apiplatform.mapper.InterfaceInfoMapper;
 import com.bobochang.apiplatform.service.InterfaceInfoService;
+import com.bobochang.sdk.client.BobochangApiClient;
+import com.bobochang.sdk.model.User;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author bobochang
@@ -17,6 +31,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, InterfaceInfo>
         implements InterfaceInfoService {
+
+    @Resource
+    private BobochangApiClient bobochangApiClient;
+
 
     @Override
     public void validInterfaceInfo(InterfaceInfo interfaceInfo, boolean add) {
@@ -33,6 +51,44 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         if (StringUtils.isNotBlank(name) && name.length() > 50) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "名称过长");
         }
+    }
+
+    @Override
+    @Transactional
+    public Object invokeInterfaceInfo(InterfaceInfoInvokeRequest interfaceInfoInvokeRequest, HttpServletRequest request) {
+        // todo 全局变量来判定接口是否可以调通，但是有些接口调用不成功返回错误信息是字符串，因此这里要优化判定接口没有调用的方法
+        ImmutablePair<Integer, String> res = null;
+        // 判断传参是否规范
+        ThrowUtils.throwIf(ObjectUtils.isEmpty(interfaceInfoInvokeRequest) || interfaceInfoInvokeRequest.getId() < 1, ErrorCode.PARAMS_ERROR);
+        Long id = interfaceInfoInvokeRequest.getId();
+        String params = interfaceInfoInvokeRequest.getRequestParams();
+        // 判断接口是否存在
+        InterfaceInfo oldInterfaceInfo = getById(id);
+        ThrowUtils.throwIf(ObjectUtils.isEmpty(oldInterfaceInfo), ErrorCode.NOT_FOUND_ERROR);
+        // 判断接口状态是否已关闭
+        ThrowUtils.throwIf(oldInterfaceInfo.getStatus() != InterfaceInfoStatusEnum.ONLINE.getValue(), ErrorCode.NOT_FOUND_ERROR, "接口已关闭");
+        // 判断传入的 ak、sk 与分配的是否一致
+        // 使用 yml 配置中的 ak、sk，减少查库
+        try {
+            if (oldInterfaceInfo.getUrl().contains("randomMessage")) {
+                // res = bobochangApiClient.randomMessage(userRequestParams);
+            }
+            if (oldInterfaceInfo.getUrl().contains("name")) {
+                Gson gson = new Gson();
+                User user = gson.fromJson(params, User.class);
+                return bobochangApiClient.getUsernameByPost(user);
+            }
+            if (oldInterfaceInfo.getUrl().contains("randomACGPictures")) {
+                // res = bobochangApiClient.randomACGPictures();
+            }
+        } catch (JsonSyntaxException exception) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数不为 Json 格式");
+        }
+        ThrowUtils.throwIf(res == null, ErrorCode.SYSTEM_ERROR, "接口错误，请联系管理员");
+        if (res.getLeft() != 200) {
+            throw new BusinessException(res.getLeft(), res.getRight());
+        }
+        return res.getRight();
     }
 }
 
