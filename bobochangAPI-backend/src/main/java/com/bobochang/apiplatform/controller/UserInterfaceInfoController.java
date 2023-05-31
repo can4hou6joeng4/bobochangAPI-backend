@@ -1,5 +1,6 @@
 package com.bobochang.apiplatform.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bobochang.apicommon.common.BaseResponse;
@@ -67,6 +68,15 @@ public class UserInterfaceInfoController {
         userInterfaceInfoService.validUserInterfaceInfo(userInterfaceInfo, true);
         User loginUser = userService.getLoginUser(request);
         userInterfaceInfo.setUserId(loginUser.getId());
+        // 判断当前用户和调用接口是否已经存在
+        LambdaQueryWrapper<UserInterfaceInfo> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(UserInterfaceInfo::getUserId, userInterfaceInfo.getUserId())
+                .eq(UserInterfaceInfo::getInterfaceInfoId, userInterfaceInfo.getInterfaceInfoId());
+        long count = userInterfaceInfoService.count(queryWrapper);
+        if (count > 0) {
+            log.info("当前用户和该接口已经存在调用关系 无需继续新建");
+            return ResultUtils.success(null);
+        }
         boolean result = userInterfaceInfoService.save(userInterfaceInfo);
         if (!result) {
             throw new BusinessException(ErrorCode.OPERATION_ERROR);
