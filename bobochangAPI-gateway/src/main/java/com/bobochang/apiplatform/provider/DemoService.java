@@ -1,4 +1,4 @@
-package com.bobochang.apigateway.provider;
+package com.bobochang.apiplatform.provider;
 
 public interface DemoService {
 
