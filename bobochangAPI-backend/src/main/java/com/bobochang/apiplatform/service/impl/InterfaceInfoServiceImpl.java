@@ -11,6 +11,7 @@ import com.bobochang.apiplatform.exception.BusinessException;
 import com.bobochang.apiplatform.exception.ThrowUtils;
 import com.bobochang.apiplatform.mapper.InterfaceInfoMapper;
 import com.bobochang.apiplatform.service.InterfaceInfoService;
+import com.bobochang.apiplatform.service.UserService;
 import com.bobochang.sdk.client.BobochangApiClient;
 import com.bobochang.sdk.model.User;
 import org.apache.commons.lang3.ObjectUtils;
@@ -32,6 +33,8 @@ import javax.servlet.http.HttpServletRequest;
 public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, InterfaceInfo>
         implements InterfaceInfoService {
 
+    @Resource
+    private UserService userService;
     @Resource
     private BobochangApiClient bobochangApiClient;
 
@@ -74,9 +77,13 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
                 // res = bobochangApiClient.randomMessage(userRequestParams);
             }
             if (oldInterfaceInfo.getUrl().contains("name")) {
+                com.bobochang.apicommon.model.entity.User loginUser = userService.getLoginUser(request);
+                String accessKey = loginUser.getAccessKey();
+                String secretKey = loginUser.getSecretKey();
+                BobochangApiClient tempClient = new BobochangApiClient(accessKey, secretKey);
                 Gson gson = new Gson();
                 User user = gson.fromJson(params, User.class);
-                return bobochangApiClient.getUsernameByPost(user);
+                return tempClient.getUsernameByPost(user);
             }
             if (oldInterfaceInfo.getUrl().contains("randomACGPictures")) {
                 // res = bobochangApiClient.randomACGPictures();
