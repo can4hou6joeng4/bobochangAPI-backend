@@ -1,11 +1,8 @@
 package com.bobochang.apiinterface.controller;
 
-import com.bobochang.apiinterface.uils.SignUtils;
 import com.bobochang.sdk.model.User;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * 名称 API
