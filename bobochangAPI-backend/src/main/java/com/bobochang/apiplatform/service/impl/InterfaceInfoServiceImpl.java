@@ -1,7 +1,6 @@
 package com.bobochang.apiplatform.service.impl;
 
 import com.alibaba.nacos.shaded.com.google.gson.Gson;
-import com.alibaba.nacos.shaded.com.google.gson.JsonSyntaxException;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bobochang.apicommon.common.ErrorCode;
 import com.bobochang.apicommon.model.dto.interfaceInfo.InterfaceInfoInvokeRequest;
@@ -17,7 +16,6 @@ import com.bobochang.sdk.model.User;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,8 +33,6 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
 
     @Resource
     private UserService userService;
-    @Resource
-    private BobochangApiClient bobochangApiClient;
 
 
     @Override
@@ -71,27 +67,19 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         // 判断接口状态是否已关闭
         ThrowUtils.throwIf(oldInterfaceInfo.getStatus() != InterfaceInfoStatusEnum.ONLINE.getValue(), ErrorCode.NOT_FOUND_ERROR, "接口已关闭");
         // 判断传入的 ak、sk 与分配的是否一致
-        // 使用 yml 配置中的 ak、sk，减少查库
-        try {
-            if (oldInterfaceInfo.getUrl().contains("randomMessage")) {
-                // res = bobochangApiClient.randomMessage(userRequestParams);
-            }
-            if (oldInterfaceInfo.getUrl().contains("name")) {
-                com.bobochang.apicommon.model.entity.User loginUser = userService.getLoginUser(request);
-                String accessKey = loginUser.getAccessKey();
-                String secretKey = loginUser.getSecretKey();
-                BobochangApiClient tempClient = new BobochangApiClient(accessKey, secretKey);
-                Gson gson = new Gson();
-                User user = gson.fromJson(params, User.class);
-                return tempClient.getUsernameByPost(user);
-            }
-            if (oldInterfaceInfo.getUrl().contains("randomACGPictures")) {
-                // res = bobochangApiClient.randomACGPictures();
-            }
-        } catch (JsonSyntaxException exception) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数不为 Json 格式");
+        // todo 可以使用 yml 配置中的 ak、sk，减少查库
+        com.bobochang.apicommon.model.entity.User loginUser = userService.getLoginUser(request);
+        String accessKey = loginUser.getAccessKey();
+        String secretKey = loginUser.getSecretKey();
+        BobochangApiClient tempClient = new BobochangApiClient(accessKey, secretKey);
+        if (oldInterfaceInfo.getUrl().contains("randomMessage")) {
+            res = tempClient.randomMessage(interfaceInfoInvokeRequest.getRequestParams());
         }
-        ThrowUtils.throwIf(res == null, ErrorCode.SYSTEM_ERROR, "接口错误，请联系管理员");
+        if (oldInterfaceInfo.getUrl().contains("name")) {
+            Gson gson = new Gson();
+            User user = gson.fromJson(params, User.class);
+            return tempClient.getUsernameByPost(user);
+        }
         if (res.getLeft() != 200) {
             throw new BusinessException(res.getLeft(), res.getRight());
         }
