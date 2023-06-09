@@ -13,7 +13,9 @@
     <version>1.0</version>
     <name>bobochangAPI-backend</name>
     <properties>
-        <java.version>1.8</java.version>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <packaging>jar</packaging>
 
@@ -67,6 +69,7 @@
             <groupId>com.bobochangAPI</groupId>
             <artifactId>bobochangAPI-common</artifactId>
             <version>1.0</version>
+            <type>pom</type>
         </dependency>
         <dependency>
             <groupId>com.bobochangAPI</groupId>

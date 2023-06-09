@@ -11,9 +11,6 @@
 
     <artifactId>bobochangAPI-common</artifactId>
 
-    <properties>
-        <java.version>1.8</java.version>
-    </properties>
 
     <dependencies>
         <!-- https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-boot-starter -->
