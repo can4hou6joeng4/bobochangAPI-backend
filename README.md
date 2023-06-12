@@ -26,7 +26,7 @@
 
 **项目链接：** [啵啵肠 API 开放平台](https://interface.bobochang.work)
 
-**测试账号：** `test`，**密码** `test123456`
+**测试账号：** `test`，**密码：** `test123456`
 
 **Github 地址：** [https://github.com/bobochangzzz/bobochangAPI-backend/](https://github.com/bobochangzzz/bobochangAPI-backend/)
 
@@ -80,7 +80,7 @@
 | --------------------- | ------------------ |
 | IDEA                  | Java 开发工具 IDE  |
 | Webstorm              | 前端开发工具 IDE   |
-| DATAGRIP              | MySQL 远程连接工具 |
+| Navicat               | MySQL 远程连接工具 |
 | Redis Desktop Manager | Redis 远程连接工具 |
 | Xshell                | Linux 远程连接工具 |
 | Xftp                  | Linux 文件上传工具 |
