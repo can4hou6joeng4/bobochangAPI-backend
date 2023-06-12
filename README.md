@@ -94,13 +94,13 @@
 
 ## 项目截图
 
-![](/Users/bobochang/Documents/PROJECTS/bobochangAPI-backend/images/1.png)
+![](./images/1.png)
 
-![](/Users/bobochang/Documents/PROJECTS/bobochangAPI-backend/images/2.png)
+![](./images/2.png)
 
-![](/Users/bobochang/Documents/PROJECTS/bobochangAPI-backend/images/3.png)
+![](./images/3.png)
 
-![](/Users/bobochang/Documents/PROJECTS/bobochangAPI-backend/images/4.png)
+![](./images/4.png)
 
 ## 后续计划
 
