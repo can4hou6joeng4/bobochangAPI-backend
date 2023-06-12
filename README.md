@@ -26,7 +26,7 @@
 
 **项目链接：** [啵啵肠 API 开放平台](https://interface.bobochang.work)
 
-**测试账号：** `test`，**密码：** `test123456`
+**测试账号：** `test` **密码：** `test123456`
 
 **Github 地址：** [https://github.com/bobochangzzz/bobochangAPI-backend/](https://github.com/bobochangzzz/bobochangAPI-backend/)
 
