@@ -1,6 +1,7 @@
 <p align="center">
   <a href="https://interface.bobochang.work/">
-    <img src="https://bobocahng-1309945187.cos.ap-guangzhou.myqcloud.com/20230522/IMG_0508.JPG" alt="啵啵肠API开放平台" style="border-radius: 50%;">
+    <img src="https://bobocahng-1309945187.cos.ap-guangzhou.myqcloud.com/20230522/IMG_0508.JPG" 
+         alt="啵啵肠API开放平台" width="50" height="50" style="border-radius: 80%;">
   </a>
 </p>
 
